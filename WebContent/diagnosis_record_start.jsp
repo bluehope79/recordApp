@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>진료 음성 저장 시스템</title>
+<title>진료기록녹음-진료 음성 저장 시스템</title>
 <link href="/ui_common/css/default.css" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src='/js/annyang.js'></script>
@@ -24,15 +24,15 @@
 		        </div>
 		        <div class="hd_info">
 					<ul class="">
-						<li>진료 : <span>${dto.doctorpartname }</span></li>
-						<li>성명 : <span>${dto.name}</span> (<span>${dto.id }_${drcode }</span>)
+						<li><span>내과 </span></li>
+						<li><span>${dto.name}</span> (<span>${drcode }</span>)
 						</li>
 					</ul>
 				</div>
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
-						<li class="ico_custmer"><a href="#"><span>customer</span></a></li>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
 						<li class="ico_help"><a href="#"><span>help</span></a></li>
 					</ul>
 				</div>
@@ -251,7 +251,6 @@
 		}
 
 		function createDownloadLink(blob) {
-			
 			
 			var url = URL.createObjectURL(blob);
 			var au = document.createElement('audio');

@@ -20,8 +20,7 @@ import javax.servlet.http.HttpSession;
 import com.dao.DoctorDAO;
 import com.dao.PatientDAO;
 import com.dao.PatientFileDAO;
-import com.dto.DoctorDTO;
-import com.dto.HeroDTO;
+import com.dto.DoctorDTO; 
 import com.dto.PatientDTO;
 import com.dto.PatientFileDTO;
 import com.google.gson.Gson;
@@ -105,7 +104,7 @@ public class recordServlet extends HttpServlet {
 			
 			DoctorDTO getSessionDto = (DoctorDTO) session.getAttribute("DoctorDto");
 			
-			if(getSessionDto == null) {
+			if(getSessionDto == null) { 
 			
 				if(dto.getId() == "" || dto.getId() == null) {
 					
@@ -120,7 +119,7 @@ public class recordServlet extends HttpServlet {
 				
 				req.setAttribute("dto", dto);
 				
-			} else {
+			} else { 
 				session.setAttribute("DoctorDto", dto);
 				req.setAttribute("dto", getSessionDto);
 				
@@ -166,7 +165,7 @@ public class recordServlet extends HttpServlet {
 			String patientPagingText = myUtil.getPatientPagingText(currentPage, totalPage);
 
 			List<PatientDTO> lists = dao.getReadData(name,birth,gender,cellphone,start,end);
-			
+ 
 			if(totalPage != 0) {
 				lists.get(0).setPatientPagingText(patientPagingText);
 			}
@@ -185,8 +184,6 @@ public class recordServlet extends HttpServlet {
             }
 			
 		} else if(uri.indexOf("patientInfoSave.do") != -1) {
-
-			System.out.println("==========================start ins");
 			
 			String pName = req.getParameter("pName");
 			String pBirth = req.getParameter("pBirth");

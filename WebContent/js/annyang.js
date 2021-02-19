@@ -198,7 +198,7 @@
       recognition.continuous = root.location.protocol === 'http:';
 
       // Sets the language to the default 'en-US'. This can be changed with annyang.setLanguage()
-      recognition.lang = 'ko';
+      recognition.lang = 'ko'; //영문은 en-US(default) 
 
       recognition.onstart = function() {
         isListening = true;

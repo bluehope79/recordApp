@@ -18,4 +18,5 @@
   	<servlet-name>recordServlet</servlet-name>
   	<url-pattern>/stt/*</url-pattern>
   </servlet-mapping>
+  
 </web-app>

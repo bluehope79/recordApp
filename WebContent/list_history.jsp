@@ -10,7 +10,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <meta charset="UTF-8">
-<title>진료 음성 저장 시스템</title>
+<title>검색결과-진료 음성 저장 시스템</title>
 <link href="/ui_common/css/default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -23,15 +23,15 @@
 		        </div>
 		        <div class="hd_info">
 					<ul class="">
-						<li>진료 : <span>${dto.doctorpartname }</span></li>
-						<li>성명 : <span>${dto.name}</span> (<span>${dto.id }_${drcode }</span>)
+						<li>   <span>내과 </span></li>
+						<li> <span>${dto.name}</span> (<span>${drcode }</span>)
 						</li>
 					</ul>
 				</div>
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
-						<li class="ico_custmer"><a href=""><span>customer</span></a></li>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
 						<li class="ico_help"><a href=""><span>help</span></a></li>
 					</ul>
 				</div>
@@ -44,7 +44,7 @@
 		    	<!-- 환자검색 -->
 		    	<section class="sch">
 		        
-		        	<h1>환자검색</h1>
+		        	<h1>환자 진료기록 검색결과</h1>
 		        
 		        	<div class="schWrap">
 		            
@@ -223,9 +223,9 @@
 	
 		function search(page) {
 			
-			/* if("${drcode }" == "") {
+			if("${drcode }" == "") {
 				logout();
-			} */
+			} 
 	
 			$('.progWrap').css('display','block');
 			$('.loadingImg').css('display','block');
@@ -250,7 +250,7 @@
 						$('#lodingTxt').css('display','none');
 						$('.progWrap').css('display','none');
 							
-						alert("1검색결과 자료가 존재하지 않습니다.");
+						alert("검색결과 자료가 존재하지 않습니다.");
 						
 						return;
 						

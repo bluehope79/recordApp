@@ -32,6 +32,7 @@ public class PatientFileDAO {
 					+ "(select name from doctor where doctorcode = patientfile.doctorcode) as doctorname,wavfilename,txtfilename,wavfileloc,txtfileloc,insertdate,seq "
 					+ "from patientfile where patientcode=? order by TO_NUMBER(seq) desc ) data ) where rnum>=? and rnum<=?";
 			
+			System.out.println("resultsql::"+sql);
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patientcode);
 			pstmt.setInt(2, start);

@@ -11,7 +11,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <meta charset="UTF-8">
-<title>진료 음성 저장 시스템</title>
+<title>검색-진료 음성 저장 시스템</title>
 <link href="/ui_common/css/default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -20,19 +20,19 @@
 			<!-- header -->
 			<header class="header">
 				<div class="hd_logo">
-					<a href="/stt/home.do"><span>진료 음성 저장 시스템</span></a>
+					<a href="/stt/home.do"><span>진료 음성 저장 시스템 </span></a>
 				</div>
 				<div class="hd_info">
 					<ul class="">
-						<li>진료 : <span>${dto.doctorpartname }</span></li>
-						<li>성명 : <span>${dto.name}</span> (<span>${dto.id }_${dto.doctorcode }</span>)
+						<li> <span>내과 </span></li>
+						<li> <span>${dto.name}</span> 
 						</li>
 					</ul>
 				</div>
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
-						<li class="ico_custmer"><a href="#"><span>customer</span></a></li>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
 						<li class="ico_help"><a href="#"><span>help</span></a></li>
 					</ul>
 				</div>
@@ -45,7 +45,7 @@
 				<!-- 환자검색 -->
 				<section class="sch">
 	
-					<h1>환자검색</h1>
+					<h1>환자검색(홈)</h1>
 	
 					<div class="schWrap">
 	
@@ -178,51 +178,6 @@
 		</section>
 		<!--// 진료 시작 확인 팝업 -->
 	
-		<!-- 녹음파일 듣기 팝업 -->
-		<div class="pop pop_audioF" style="display: none;">
-			<div class="popWrap">
-				<div class="pop_hd">
-					<p class="txt_patient">
-						환자명 : <em>임꺽정</em>
-					</p>
-					<p class="txt_file">20180831_A12345.wav</p>
-					<a href="#" class="file_download"><span>DownLoad</span></a>
-				</div>
-				<div class="pop_cnt">
-					<div class="audWrap">
-						<div class="audIns">
-	
-							<!-- 오디오 삽입 부분 :: 샘플용 -->
-	
-							<!-- 샘플용 -->
-							<div class="audInsWrap">
-								<p class="audioBar">
-									<span style="width: 50px;"><em class="cursor"
-										style="left: 50px;"></em></span>
-								</p>
-								<!-- span과 em의 style값 :  1초당 (총 시간(초)) * 560)px 만큼 이동 -->
-								<p class="time">
-									<span>00:58</span> |<em> 01:21</em>
-								</p>
-							</div>
-							<!--// 샘플용 -->
-	
-						</div>
-	
-					</div>
-					<div class="btnWrap btnPlayer">
-						<!-- 활성화 버튼은 클래스 ac 삽입 -->
-						<a href="#" class="btn_icon btn_pause"><span>pause</span></a> <a
-							href="#" class="btn_icon btn_play ac"><span>play</span></a> <a
-							href="#" class="btn_icon btn_stop"><span>stop</span></a>
-					</div>
-				</div>
-				<div class="btn_icon btn_close">
-					<span>close</span>
-				</div>
-			</div>
-		</div>
-		<!--// 녹음파일 듣기 팝업 -->
 	</form>
 	
 	<script type="text/javascript">
@@ -230,15 +185,13 @@
 		function search(page) {
 			
 			if("${dto.doctorcode }" == "") {
-				logout();
+			//	logout();
 			}
 			
 			var flag = false;
 			var chkVal = 0;
 			
-			var drcode = "${dto.doctorcode }";  
-			console.log(drcode); 
-			//console.log($('#date').val());
+			var drcode = "${dto.doctorcode }";    
 			
 			if($('#name').val() != "" && $('#name').val() != null) {
 				chkVal ++;
@@ -283,6 +236,7 @@
 			var birth = $('#birth').val();
 			var gender = $('#gender').val();
 			var cellphone = $('#cellphone').val();
+			
 			
 			$.ajax({
 				url : "stt/list.do",
@@ -458,37 +412,42 @@
 			$('.loadingImg').css('display','block');
 			$('#loadingTxt').css('display','block');
 			
-			$.ajax({
-				url : "stt/patientInfoSave.do",
-				type : "GET",
-				cache : false,
-				dataType : "text",
-				contentType: 'application/x-www-form-urlencoded; charset=euc-kr', 
-				data : {
-					"pName" : $('#name').val(),
-					"pBirth" : $('#birth').val(),
-					"pGender" : $('#gender').val(),
-					"pNum" : $('#cellphone').val(),
-					"drcodeval" : drcode
-				},
-				success : function(data) {
-				
-					$('.loadingImg').css('display','none');
-					$('#loadingTxt').css('display','none');
-					$('.progWrap').css('display','none');
+			if($('#name').val() != "" && $('#birth').val() != ""  && $('#gender').val() != ""  && $('#cellphone').val() != "" ){
+				$.ajax({
+					url : "stt/patientInfoSave.do",
+					type : "GET",
+					cache : false,
+					dataType : "text",
+					contentType: 'application/x-www-form-urlencoded; charset=euc-kr', 
+					data : {
+						"pName" : $('#name').val(),
+						"pBirth" : $('#birth').val(),
+						"pGender" : $('#gender').val(),
+						"pNum" : $('#cellphone').val(),
+						"drcodeval" : drcode
+					},
+					success : function(data) {
 					
-					alert("환자 등록에 성공하였습니다.");
-					
-					search(1);
-					
-				},
-				error : function(request, status, error) {
-					var msg = "ERROR : " + request.status + "<br>"
-					msg += +"내용 : " + request.responseText + "<br>"
-							+ error;
-					console.log(msg);
-				}
-			});
+						$('.loadingImg').css('display','none');
+						$('#loadingTxt').css('display','none');
+						$('.progWrap').css('display','none');
+						
+						alert("환자 등록에 성공하였습니다.");
+						
+						search(1);
+						
+					},
+					error : function(request, status, error) {
+						var msg = "ERROR : " + request.status + "<br>"
+						msg += +"내용 : " + request.responseText + "<br>"
+								+ error;
+						console.log(msg);
+					}
+				});
+			}else {
+				alert("환자등록하기 위한 정보가 충분하지 않습니다.");  
+				location.href="/stt/home.do?id=${dto.id}&pw=1234";	
+			} 
 			
 		}
 		

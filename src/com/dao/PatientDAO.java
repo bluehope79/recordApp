@@ -24,6 +24,7 @@ public class PatientDAO {
 		ResultSet rs;
 		PreparedStatement pstmt;
 		String name2, birth2, gender2, cellphone2 ;  
+		Integer end2 = 200; 
 		
 		try { 
 			name2 = "%" + name + "%"; 
@@ -36,7 +37,7 @@ public class PatientDAO {
 					+ "(select doctorcode,name,(substr(birth,1,4) || '-' || substr(birth,5,2) || '-' || substr(birth,7,2)) as birth,gender,cellphone,patientcode "
 					+ "from patient where name like ? and birth like ? and gender like ? and cellphone like ? order by patientcode desc) data) "
 					+ "where rnum >= ? and rnum <= ?";*/
-			System.out.println(name);
+			
 			if (name != "" && birth == "" && gender == "" && cellphone =="" ){
 				sql = "select * from "
 						+ "(select rownum rnum, data.* from "
@@ -135,15 +136,33 @@ public class PatientDAO {
 				sql = "select * from "
 						+ "(select rownum rnum, data.* from "
 						+ "(select doctorcode,name,(substr(birth,1,4) || '-' || substr(birth,5,2) || '-' || substr(birth,7,2)) as birth,gender,cellphone,patientcode "
-						+ " from patient where (cellphone like ? )  "
-						+ " order by patientcode desc) data) "
-						+ "where rnum >= ? and rnum <= ?";
+						+ " from patient where (cellphone like cellphone )  "
+						+ " order by patientcode desc) data)  "
+						+ " where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				System.out.println("sql4"+sql);
 				pstmt.setString(1, cellphone);
-				pstmt.setInt(2, start);
-				pstmt.setInt(3, end);
+				pstmt.setInt(1, start);
+				pstmt.setInt(2, end);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					
+					PatientDTO dto = new PatientDTO();
+					
+					dto.setDoctorcode(rs.getString("doctorcode"));
+					dto.setName(rs.getString("name"));
+					dto.setBirth(rs.getString("birth"));
+					dto.setGender(rs.getString("gender"));
+					dto.setCellphone(rs.getString("cellphone"));
+					dto.setPatientcode(rs.getString("patientcode"));
+					
+					lists.add(dto);
+					
+				}
+				
+				rs.close();
+				pstmt.close();
 			}else if (name != "" || birth != "" || gender == "" || cellphone =="" ){
 				sql = "select * from "
 						+ "(select rownum rnum, data.* from "

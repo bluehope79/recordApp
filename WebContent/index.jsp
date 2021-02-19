@@ -10,7 +10,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <meta charset="UTF-8">
-<title>진료 음성 저장 시스템</title>
+<title>로그인-진료 음성 저장 시스템</title>
 <link href="/ui_common/css/default.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -33,7 +33,7 @@
 
 					<div class="loginWrap">
 						<div class="txt">
-							<h2>사용자인증</h2>
+							<h2>진료기록 로그인</h2>
 						</div>
 						<div class="loginbox">
 							<span class="form-text form-id"> 
@@ -101,12 +101,12 @@
 		function loginChk() {
 	
 			if($('#id').val() == null || $('#id').val() == "") {
-				alert("아이디를 입력해주세요");
+				alert("아이디를 입력해주세요.");
 				return;
 			}
 			
 			if($('#pw').val() == null || $('#pw').val() == "") {
-				alert("비밀번호를 입력해주세요");
+				alert("비밀번호를 입력해주세요.");
 				return;
 			}
 			

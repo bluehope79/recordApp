@@ -1,6 +1,6 @@
 package com.dto;
 
-public class DoctorDTO {
+public class DoctorDTO  {
 
 	private String doctorcode;
 	private String id;
