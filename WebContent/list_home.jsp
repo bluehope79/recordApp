@@ -32,7 +32,15 @@
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
+						<c:choose>
+							<c:when test="${dto.doctorcode == '000001' }">
 						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
+							</c:when>
+							<c:otherwise>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test02&pw=1234"><span>홈</span></a></li>
+							</c:otherwise>
+						</c:choose>
+						
 						<li class="ico_help"><a href="#"><span>help</span></a></li>
 					</ul>
 				</div>
@@ -192,7 +200,7 @@
 			var chkVal = 0;
 			
 			var drcode = "${dto.doctorcode }";    
-			
+		
 			if($('#name').val() != "" && $('#name').val() != null) {
 				chkVal ++;
 				flag = true;
@@ -201,9 +209,9 @@
 				chkVal ++;
 				flag = true;
 			}
-			/* if($('#gender').val() != null && $('#gender').val() != "") {
-				//flag = true;
-			} */
+			 if($('#gender').val() != null && $('#gender').val() != "") {
+				flag = true;
+			} 
 			if($('#cellphone').val() != null && $('#cellphone').val() != "") {
 				chkVal ++;
 				flag = true;
@@ -237,7 +245,6 @@
 			var gender = $('#gender').val();
 			var cellphone = $('#cellphone').val();
 			
-			
 			$.ajax({
 				url : "stt/list.do",
 				type : "GET",
@@ -249,7 +256,8 @@
 					"name" : name,
 					"birth" : birth,
 					"gender" : gender,
-					"cellphone" : cellphone
+					"cellphone" : cellphone,
+					"drcode" : drcode
 				},
 				success : function(data) {
 					

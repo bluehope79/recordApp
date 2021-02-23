@@ -136,12 +136,15 @@ public class recordServlet extends HttpServlet {
 			String gender = req.getParameter("gender");
 			String cellphone = req.getParameter("cellphone");
 
+			String drcode = req.getParameter("drcode");
+
 			birth = birth.replace("-", "");
 
 			System.out.println(name); 
 			System.out.println(birth); 
 			System.out.println(gender); 
 			System.out.println(cellphone); 
+			System.out.println(drcode); 
 			
 			int currentPage = 1;
 			int listViewCount = 10;
@@ -164,7 +167,7 @@ public class recordServlet extends HttpServlet {
 			
 			String patientPagingText = myUtil.getPatientPagingText(currentPage, totalPage);
 
-			List<PatientDTO> lists = dao.getReadData(name,birth,gender,cellphone,start,end);
+			List<PatientDTO> lists = dao.getReadData(name,birth,gender,cellphone,start,end,drcode);
  
 			if(totalPage != 0) {
 				lists.get(0).setPatientPagingText(patientPagingText);
@@ -271,10 +274,9 @@ public class recordServlet extends HttpServlet {
 			
 			int totalPage = myUtil.getPageCount(listViewCount, dao.getDataCount(patientcode));
 			
-			String patientPagingText = myUtil.getPatientPagingText(currentPage, totalPage);
+			String patientPagingText = myUtil.getPatientPagingText(currentPage, totalPage); 
 			
 			List<PatientFileDTO> lists = dao.getReadData(patientcode,start,end);
-			
 			if(totalPage != 0) {
 				lists.get(0).setPatientPagingText(patientPagingText);
 			}

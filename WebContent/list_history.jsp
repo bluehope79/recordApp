@@ -31,7 +31,14 @@
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
+						<c:choose>
+							<c:when test="${drcode == '000001' }">
 						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
+							</c:when>
+							<c:otherwise>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test02&pw=1234"><span>홈</span></a></li>
+							</c:otherwise>
+						</c:choose>
 						<li class="ico_help"><a href=""><span>help</span></a></li>
 					</ul>
 				</div>
@@ -56,46 +63,48 @@
 		                </colgroup> 
 		                <tbody>
 		                <tr>
-		                    <td>
-		                    	<span class="lb-wrap">
-		                    	<label for="">이름</label>
-		                        </span>
-		                        <span class="inp-wrap">
-		                        <input type="text" class="" id="" title="이름 입력" value="" >
-		                        </span>
-		                    </td>
-		                    <td>
-		                    	<span class="lb-wrap">
-		                    	<label for="">생년월일</label>
-		                        </span>
-		                        <span class="inp-wrap">
-		                        <input type="date" class="" id="" title="생년월일 입력" value="">
-		                        </span>
-		                    </td>
-		                    <td rowspan="2" ><a href="" class="btn btn_sch"><span>search</span></a>  </td>
-		                </tr>
-		                <tr>
-		                	<td>
-		                    	<span class="lb-wrap">
-		                    	<label for="">성별</label>
-		                        </span>
-		                        <span class="inp-wrap">
-		                        <select class="" id="">
-		                        	<option value=""></option>
-		                            <option value="M">남</option>
-									<option value="F">여</option>
-		                        </select>
-		                        </span>
-		                    </td>                    
-		                    <td>
-								<span class="lb-wrap"> 
-									<label for="">휴대폰번호</label>
-								</span> 
-								<span class="inp-wrap"> 
-									<input type="text" class="" id="cellphone" title="휴대폰번호 입력" value="">
-								</span>
-							</td>                
-		                </tr>                
+									<td>
+										<span class="lb-wrap"> 
+											<label for="">이름</label>
+										</span> 
+										<span class="inp-wrap"> 
+											<input type="text" class="" id="name" title="이름 입력" value="" onkeyup="enterkey();">
+										</span>
+									</td>
+									<td>
+										<span class="lb-wrap"> 
+											<label for="">생년월일</label>
+										</span> 
+										<span class="inp-wrap"> 
+											<input type="date" class="" id="birth" title="생년월일 입력" value="" onkeyup="enterkey();">
+										</span>
+									</td>
+									<td rowspan="2">
+										<a href="javascript:search2(1);" class="btn btn_sch"><span>search</span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<span class="lb-wrap"> 
+											<label for="">성별</label>
+										</span> 
+										<span class="inp-wrap"> 
+											<select class="" id="gender">
+												<option value=""></option>
+												<option value="M">남</option>
+												<option value="F">여</option>
+											</select>
+										</span>
+									</td>
+									<td>
+										<span class="lb-wrap"> 
+											<label for="">휴대폰번호</label>
+										</span> 
+										<span class="inp-wrap"> 
+											<input type="text" class="" id="cellphone" title="휴대폰번호 입력" value="" onclick="inputSetNumber(this);" onKeyup="inputPhoneNumber(this);" maxlength="13">
+										</span>
+									</td>
+								</tr>        
 		                </tbody>
 		                </table>                              
 		            </div>
@@ -218,11 +227,10 @@
 	
 		console.log("${drcode }");
 		var drcode = "${drcode }";
-	
+
 		search(1);
-	
+		
 		function search(page) {
-			
 			if("${drcode }" == "") {
 				logout();
 			} 
@@ -233,6 +241,7 @@
 			
 			var patientcode = "${patientcode}";
 			
+			
 			$.ajax({
 				url : "stt/historyList.do",
 				type : "GET",
@@ -240,7 +249,7 @@
 				dataType : "json",
 				data : {
 					"page" : page,
-					"patientcode" : patientcode
+					"patientcode" : patientcode,
 				},
 				success : function(data) {
 					
@@ -303,6 +312,144 @@
 				}
 			});
 			
+		}
+
+		function search2(page) {
+				
+				if("${drcode }" == "") {
+					logout();
+				} 
+				
+				var flag = false;
+				var chkVal = 0;
+				
+				var drcode = "${drcode }";    
+			
+				if($('#name').val() != "" && $('#name').val() != null) {
+					chkVal ++;
+					flag = true;
+				}
+				if($('#birth').val() != null && $('#birth').val() != "") {
+					chkVal ++;
+					flag = true;
+				}
+				 if($('#gender').val() != null && $('#gender').val() != "") {
+					flag = true;
+				} 
+				if($('#cellphone').val() != null && $('#cellphone').val() != "") {
+					chkVal ++;
+					flag = true;
+				}
+				
+				if(!validationCheck())
+					return;
+				
+				$('.progWrap').css('display','block');
+				$('.loadingImg').css('display','block');
+				$('#loadingTxt').css('display','block');
+				
+				if(!flag) {
+					
+					setTimeout(function() {
+						$('.loadingImg').css('display','none');
+						$('#loadingTxt').css('display','none');
+						$('.progWrap').css('display','none');
+						
+						//alert("검색조건이 하나이상 있어야 합니다.");
+						swal("검색조건이 하나 이상 있어야 합니다.", "", "error");
+						
+						}, 100);
+
+					return;
+					
+				}
+				
+				var name = $('#name').val();
+				var birth = $('#birth').val();
+				var gender = $('#gender').val();
+				var cellphone = $('#cellphone').val();
+				 
+				
+				
+				$.ajax({
+					url : "stt/list.do",
+					type : "GET",
+					cache : false,
+					dataType : "json",
+					contentType: 'application/x-www-form-urlencoded; charset=euc-kr', 
+					data : {
+						"page" : page,
+						"name" : name,
+						"birth" : birth,
+						"gender" : gender,
+						"cellphone" : cellphone,
+						"drcode" : drcode
+					},
+					success : function(data) {
+						
+						if(data.length == 0) {
+							
+							setTimeout(function() {
+								$('.loadingImg').css('display','none');
+								$('#loadingTxt').css('display','none');
+								$('.progWrap').css('display','none');
+								
+								alert("검색결과 자료가 존재하지 않습니다.");
+								
+								console.log("chkVal"+chkVal);
+								
+								if(chkVal > 0 ) {
+									
+									$('#patientInsert').css('visibility','visible');
+																
+								}
+								
+								}, 500);
+
+							return;
+							
+						}
+						
+						$('#patientList').children().remove();
+						$('#paging').children().remove();
+						
+						var appendText = "";
+						
+						$('.loadingImg').css('display','none');
+						$('#loadingTxt').css('display','none');
+						$('.progWrap').css('display','none');
+						
+						$.each(data,function(key,value) {
+							
+							var patientcode = '\'' + value.patientcode + '\''
+							
+							var doctorcode = '\'' + value.doctorcode + '\''
+							
+							
+							appendText += '<tr>'
+							+ '<td>' + value.name + '</td>'
+							+ '<td>' + value.gender + '</td>'
+							+ '<td>' + value.birth + '</td>'
+							+ '<td>' + value.cellphone + '</td>'
+							+ '<td><a href="javascript:searchPatiendData(' + patientcode + ',' + doctorcode + ')">' + value.patientcode + '</a></td>'
+							+ '</tr>'
+							
+						});
+						
+						$('#patientList').html(appendText);
+						$('#paging').css('visibility','visible');
+						$('#paging').html(data[0]['patientPagingText']);
+						
+					},
+					error : function(request, status, error) {
+						var msg = "ERROR : " + request.status + "<br>"
+						msg += +"내용 : " + request.responseText + "<br>"
+								+ error;
+						console.log(msg);
+					}
+				});
+				
+			
 		}//end of search 
 		
 		function diagnosisStart(drcode,patientcode) {
@@ -314,6 +461,101 @@
 			$('#diagnosisStart').css('display','block');
 			
 		}
+		
+		function inputPhoneNumber(obj) {
+
+		    var number = obj.value.replace(/[^0-9]/g, "");
+		    obj.value = number;
+		    var phone = "";
+
+		    if(number.length < 4) {
+		        return number;
+		    } else if(number.length < 7) {
+		        phone += number.substr(0, 3);
+		        phone += "-";
+		        phone += number.substr(3);
+		    } else if(number.length < 11) {
+		        phone += number.substr(0, 3);
+		        phone += "-";
+		        phone += number.substr(3, 3);
+		        phone += "-";
+		        phone += number.substr(6);
+		    } else {
+		        phone += number.substr(0, 3);
+		        phone += "-";
+		        phone += number.substr(3, 4);
+		        phone += "-";
+		        phone += number.substr(7);
+		    }
+		    obj.value = phone;
+		}
+		
+		function inputSetNumber(obj) {
+
+			if(obj.value.length == 0)
+		    	obj.value = "010-";
+			
+		}
+		
+		function validationCheck() {
+			
+			var checkValue = true;
+			
+			if($('#name').val() != "" && $('#name').val() != null) {
+				if($('#name').val().length < 2) {
+					alert("이름을 두 글자 이상 입력해 주세요.");
+					$('#name').focus();
+					checkValue = false;
+				}
+			}
+			
+			if($('#birth').val() != null && $('#birth').val() != "") {
+				
+				var date = new Date(); 
+				var year = date.getFullYear(); 
+				
+				if($('#birth').val().substring(0,4) > year ) {
+					alert("금년보다 크거나 작을 수 없습니다.");
+					$('#birth').focus();
+					checkValue = false;
+				} 
+				
+			}
+
+			if($('#cellphone').val() != null && $('#cellphone').val() != "") {
+				if($('#cellphone').val().length < 12) {
+					alert("정확한 휴대폰 번호를 입력해주세요.");
+					$('#cellphone').focus();
+					checkValue = false;
+				}
+			}
+			
+			return checkValue;
+		}
+		
+		
+		function enterkey() {
+			
+	        if (window.event.keyCode == 13) {
+	 
+	        	search(1);
+	        }
+	    }
+	
+	function patientInfoSet() {
+		
+		if("${dto.doctorcode }" == "") {
+			logout();
+		}
+		
+		$('#patientInfo').css('display','block');
+		
+		$('#pName').text("이름 : " + $('#name').val());
+		$('#pBirth').text("생년월일 : " + $('#birth').val());
+		$('#pGender').text("성별 : " + $('#gender').val());
+		$('#pNum').text("휴대폰 번호 : " + $('#cellphone').val());
+		
+	}
 		
 		function sttStart(drcode,patcd) {
 			

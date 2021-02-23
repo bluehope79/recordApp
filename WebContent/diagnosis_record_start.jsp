@@ -32,7 +32,14 @@
 				<div class="hd_nav">
 					<ul class="">
 						<li class="ico_logout"><a href="javascript:logout()"><span>logout</span></a></li>
+						<c:choose>
+							<c:when test="${drcode == '000001' }">
 						<li class="ico_custmer"><a href="/stt/home.do?id=test01&pw=1234"><span>홈</span></a></li>
+							</c:when>
+							<c:otherwise>
+						<li class="ico_custmer"><a href="/stt/home.do?id=test02&pw=1234"><span>홈</span></a></li>
+							</c:otherwise>
+						</c:choose>
 						<li class="ico_help"><a href="#"><span>help</span></a></li>
 					</ul>
 				</div>
@@ -266,7 +273,7 @@
 			
 	        var formData = new FormData();
 	        formData.append("file", mFile);
-	        formData.append("drcode", "000001");
+	        formData.append("drcode",  "${drcode}");
 	        formData.append("patientcode", "${patientcode}");
 	        formData.append("content", $('#recordText').text());
 	        
